@@ -1,0 +1,84 @@
+name: Make release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  Build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.21
+    
+    - name: Variables
+      id: vars
+      run: |
+        echo "BUILDS_DIR=builds" >> $GITHUB_OUTPUT
+        echo "LINUX_BUILD_FILE=mcv_linux64_${{ github.ref_name }}.zip" >> $GITHUB_OUTPUT
+        echo "OSX_BUILD_FILE=mcv_osx_${{ github.ref_name }}.zip" >> $GITHUB_OUTPUT
+        echo "WIN_BUILD_FILE=mcv_windows_${{ github.ref_name }}.zip" >> $GITHUB_OUTPUT
+
+    - name: Build Linux
+      run: |
+        mkdir -p ${{ steps.vars.outputs.BUILDS_DIR }}/
+
+        env GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" ./mcv.go
+        zip -m -j ${{ steps.vars.outputs.BUILDS_DIR }}/${{ steps.vars.outputs.LINUX_BUILD_FILE }} ./mcv
+
+    - name: Build OSX
+      run: |
+        env GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w" ./mcv.go
+        zip -m -j ${{ steps.vars.outputs.BUILDS_DIR }}/${{ steps.vars.outputs.OSX_BUILD_FILE }} ./mcv
+
+    - name: Build Windows
+      run: |
+        env GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" ./mcv.go
+        zip -m -j ${{ steps.vars.outputs.BUILDS_DIR }}/${{ steps.vars.outputs.WIN_BUILD_FILE }} ./mcv.exe
+
+    - name: Release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: ${{ github.ref_name }}
+        tag_name: ${{ github.ref_name }}
+        body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Upload Linux artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.vars.outputs.BUILDS_DIR }}/${{ steps.vars.outputs.LINUX_BUILD_FILE }}
+        asset_name: ${{ steps.vars.outputs.LINUX_BUILD_FILE }}
+        asset_content_type: application/gzip
+
+    - name: Upload OSX artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.vars.outputs.BUILDS_DIR }}/${{ steps.vars.outputs.OSX_BUILD_FILE }}
+        asset_name: ${{ steps.vars.outputs.OSX_BUILD_FILE }}
+        asset_content_type: application/gzip
+
+    - name: Upload Windows artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.vars.outputs.BUILDS_DIR }}/${{ steps.vars.outputs.WIN_BUILD_FILE }}
+        asset_name: ${{ steps.vars.outputs.WIN_BUILD_FILE }}
+        asset_content_type: application/gzip
