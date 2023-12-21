@@ -38,7 +38,7 @@ func (item *LogLine) addColorField() {
 
 	item.json.Set("_colors", colorsMap)
 	item.json.Set("_color", colors.GetColorForLogLevel(item.json.Get("_level").Str()))
-	item.json.Set("_colorReset", colorsMap["reset"])
+	item.json.Set("_colorR", colorsMap["reset"])
 }
 
 func (item *LogLine) addLevelField() {

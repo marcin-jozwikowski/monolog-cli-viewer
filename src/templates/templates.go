@@ -5,9 +5,9 @@ import "text/template"
 const DefaultTemplateName = "normal"
 
 var templates = map[string]string{
-	DefaultTemplateName: `{{._color}}{{._level}}:{{.channel}}{{._colorReset}}{{"\t"}}{{._datetime}}{{"\t"}}{{._color}}{{.message}}{{._colorReset}}{{"\r\n"}}{{._context}}{{"\r\n"}}`,
-	"full":              `{{._color}}{{._level}}:{{.channel}}{{._colorReset}}{{"\t"}}{{._datetime}}{{"\t"}}{{._color}}{{.message}}{{._colorReset}}{{"\r\n"}}{{._contextPretty}}{{"\r\n"}}`,
-	"min":               `{{._color}}{{._level}}:{{.channel}}{{"\t"}}{{._datetime}}{{"\t"}}{{.message}}{{._colorReset}}`,
+	DefaultTemplateName: `{{._color}}{{._level}}:{{.channel}}{{._colorR}}{{"\t"}}{{._datetime}}{{"\t"}}{{._color}}{{.message}}{{._colorR}}{{"\r\n"}}{{._context}}{{"\r\n"}}`,
+	"full":              `{{._color}}{{._level}}:{{.channel}}{{._colorR}}{{"\t"}}{{._datetime}}{{"\t"}}{{._color}}{{.message}}{{._colorR}}{{"\r\n"}}{{._contextPretty}}{{"\r\n"}}`,
+	"min":               `{{._color}}{{._level}}:{{.channel}}{{"\t"}}{{._datetime}}{{"\t"}}{{.message}}{{._colorR}}`,
 }
 
 func GetTemplatateByName(name string) (*template.Template, error) {
