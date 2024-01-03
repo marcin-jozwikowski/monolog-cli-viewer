@@ -36,6 +36,10 @@ func main() {
 		line = `2023-10-23 11:03:16: [9a4e77e9afa8] [ERROR] [Whatever] Login Error`
 		logLineItem = viewer.InitLogLine(line)
 		fmt.Println(logLineItem.GetFormattedString(t))
+
+		line = `[2023-10-23T11:07:47.038324+00:00] default.INFO: User logged in {"user":{"id":"54767261-98c6-4a57-9064-0d35fd06d1fc"}} []`
+		logLineItem = viewer.InitLogLine(line)
+		fmt.Println(logLineItem.GetFormattedString(t))
 		return
 	}
 

@@ -16,6 +16,20 @@ type LogLine struct {
 	raw  string
 }
 
+func LogLineFromObjx(json objx.Map, rawLine string) *LogLine {
+	l := LogLine{
+		json: json,
+		raw:  rawLine,
+	}
+	l.addLevelField()           // fills in the _level field
+	l.addColorField()           // fills in the _color, _colorReset, _colors[] fields
+	l.addDatetimeField()        // fills in the _datetime field
+	l.serializeField("context") // filla in the _context and _contextPretty fields
+	l.serializeField("extra")   // fills in the _extra and _extraPretty fields
+
+	return &l
+}
+
 func (item *LogLine) GetFormattedString(t *template.Template) string {
 	if item.json == nil { // if the item has no json - there was a problem decoding it
 		if item.raw != "" { // if raw value has been set - return it in unformatted state
