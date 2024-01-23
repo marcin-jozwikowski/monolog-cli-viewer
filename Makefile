@@ -3,6 +3,9 @@ build_and_run:
 	touch var/log.log
 	cat var/log.log | ./mcv
 
+run_against_data:
+	go run mcv.go -test
+
 log:
 	echo '{"message":"Example log of DEBUG level.","context":{"firewall_name":"main"},"level":100,"level_name":"DEBUG","channel":"security","datetime":"2023-11-14T00:37:26.623539+02:00","extra":{}}' > var/log.log
 	echo '{"message":"Example log of INFO level.","context":{"firewall_name":"main"},"level":200,"level_name":"INFO","channel":"security","datetime":"2023-11-14T00:37:26.623539+02:00","extra":{}}' >> var/log.log

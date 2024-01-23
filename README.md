@@ -21,10 +21,16 @@ The following parameters are supported
 
 | Param | Description | Default | 
 | --- | --- | --- |
-| -T | List all templates available to use |
 | -t | Name of the template to use | normal |
 | -i | Template body to be used instead of predefined ones. See [Templates](#templates) for more. |
+
+As well as the following flags
+| Flag | Description |
+| --- | --- |
+| -T | List all templates available to use |
 | -c | Disable colors in the output |
+| -f | Show `==> file.name <==` lines from `tail` command | 
+| -n | Don't add empty lines between entries | 
 | -test | Run the config against a predefined data-set |
 
 ### Templates
@@ -57,3 +63,11 @@ Additional fields are added to the values from monolog to be available in the te
 * `_dateTime` - a `Y-m-d H:i:s` formatted value passed in `timestamp` or `datetime` fields of the monolog JSON
 * `_context` and `_extra` - string representations of the JSON object passed in `context` and `extra` monolog fields
 * `_contextPretty` and `_extraPretty` pretty-formatted versions of the fields
+
+### Behind the scenes
+
+MCV parses each line of the incoming data and tries to display it using a provided template.
+
+As of now the [JSON](https://github.com/Seldaek/monolog/blob/main/src/Monolog/Formatter/JsonFormatter.php) and [Line](https://github.com/Seldaek/monolog/blob/main/src/Monolog/Formatter/LineFormatter.php) formatters are supported with their default config and default [message structure](https://github.com/Seldaek/monolog/blob/main/doc/message-structure.md).
+
+As the program is designed to be used in pipeline it also recognizes the file name line from `tail`. It is ignored by default.

@@ -2,6 +2,7 @@ package viewer
 
 import (
 	"errors"
+	"monolog-cli-viewer/src/cli"
 	"regexp"
 	"strings"
 
@@ -9,12 +10,21 @@ import (
 )
 
 var monologRegex *regexp.Regexp
+var fileChangeRegex *regexp.Regexp
+var showFileChangeLine bool
 
 func init() {
 	monologRegex = regexp.MustCompile(`\[(?P<time>[\S]+)\] (?P<channel>[\S]+)\.(?P<level>[\S]+): (?P<message>[\w\d\s]+)`)
+	fileChangeRegex = regexp.MustCompile(`^==>.*<==$`)
+	showFileChangeLine = *cli.RuntimeConfig.ShowFileChange
 }
 
 func InitLogLine(rawLine string) *LogLine {
+	if isFileChangeLine(rawLine) && !showFileChangeLine {
+		return &LogLine{
+			raw: "",
+		}
+	}
 	j, err := objx.FromJSON(rawLine)
 	if err != nil {
 		j, err = readMonologFormat(rawLine)
@@ -86,4 +96,10 @@ func regexMatchToMap(value string, regex *regexp.Regexp) (map[string]string, str
 	}
 
 	return results, match
+}
+
+func isFileChangeLine(rawLine string) bool {
+	found := fileChangeRegex.FindString(rawLine)
+
+	return len(found) > 0
 }

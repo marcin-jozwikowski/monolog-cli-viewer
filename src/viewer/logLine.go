@@ -3,6 +3,7 @@ package viewer
 import (
 	"bytes"
 	"encoding/json"
+	"monolog-cli-viewer/src/cli"
 	"monolog-cli-viewer/src/colors"
 	"strconv"
 	"text/template"
@@ -14,6 +15,14 @@ import (
 type LogLine struct {
 	json objx.Map
 	raw  string
+}
+
+var lineAppendix string = "\n"
+
+func init() {
+	if *cli.RuntimeConfig.NoNewLine {
+		lineAppendix = ""
+	}
 }
 
 func LogLineFromObjx(json objx.Map, rawLine string) *LogLine {
@@ -31,9 +40,10 @@ func LogLineFromObjx(json objx.Map, rawLine string) *LogLine {
 }
 
 func (item *LogLine) GetFormattedString(t *template.Template) string {
+
 	if item.json == nil { // if the item has no json - there was a problem decoding it
 		if item.raw != "" { // if raw value has been set - return it in unformatted state
-			return item.raw
+			return item.raw + lineAppendix
 		}
 		return ""
 	}
@@ -44,7 +54,7 @@ func (item *LogLine) GetFormattedString(t *template.Template) string {
 		panic(err2) // there was an error executing the template and it wasn't in the data
 	}
 
-	return tpl.String()
+	return tpl.String() + lineAppendix
 }
 
 func (item *LogLine) addColorField() {
