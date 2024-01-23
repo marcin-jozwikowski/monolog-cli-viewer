@@ -20,13 +20,12 @@ func main() {
 		return
 	}
 
-	t := initiateTemplate() //get template from the CLI params, or the default one
-
 	colors.SetEnabled(!*cli.RuntimeConfig.NoColors) // enable or disable the colors based on CLI flag
 	viewer.SetSettings(viewer.Settings{
 		NoNewLine:           *cli.RuntimeConfig.NoNewLine,      // don't add empty lines
 		ShowFileChangeLine:  *cli.RuntimeConfig.ShowFileChange, // show file change from tail
 		ShowParsedLinesOnly: *cli.RuntimeConfig.ParsedLineOnly, // don't show unparsed lines
+		Template:            initiateTemplate(),                // get template from the CLI params, or the default one
 	})
 	if *cli.RuntimeConfig.Test == true {
 		// test values @todo - put those to tests
@@ -40,7 +39,7 @@ func main() {
 
 		for _, line := range values {
 			logLineItem := viewer.InitLogLine(line)
-			fmt.Print(logLineItem.GetFormattedString(t))
+			fmt.Print(logLineItem.GetFormattedString())
 		}
 		return
 	}
@@ -51,8 +50,8 @@ func main() {
 		for scanner.Scan() { // wait for a line of text
 			line := scanner.Text()
 
-			logLineItem := viewer.InitLogLine(line)      // init the logItem from line string
-			fmt.Print(logLineItem.GetFormattedString(t)) // format it and print it
+			logLineItem := viewer.InitLogLine(line)     // init the logItem from line string
+			fmt.Print(logLineItem.GetFormattedString()) // format it and print it
 		}
 
 		if err := scanner.Err(); err != nil {

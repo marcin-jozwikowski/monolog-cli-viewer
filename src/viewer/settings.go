@@ -1,9 +1,12 @@
 package viewer
 
+import "text/template"
+
 type Settings struct {
 	NoNewLine           bool
 	ShowFileChangeLine  bool
 	ShowParsedLinesOnly bool
+	Template            *template.Template
 }
 
 var settings Settings = Settings{
