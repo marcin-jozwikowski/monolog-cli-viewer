@@ -9,7 +9,34 @@ jobs:
   Build-and-release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Check Changelog
+      run: |
+        TAG=$(git tag --points-at $GITHUB_SHA | sed 's/^v//')
+        CHANGELOG_ENTRY="## [$TAG] -"
+        if ! grep -Fq "$CHANGELOG_ENTRY" CHANGELOG.md; then
+          echo "Error: Changelog entry not found for tag $TAG in CHANGELOG.md"
+          exit 1
+        fi
+
+        # A fallback
+        cat CHANGELOG.md > release_body
+
+        # Fetch lines from CHANGELOG between the previous and current tag
+        PREVIOUS_TAG=$(git tag -l | sort -V | tail -n 2 | head -n 1 | sed 's/^v//')
+        if [ -n "$PREVIOUS_TAG" ]; then
+          PREVIOUS_TAG_ENTRY="## [$PREVIOUS_TAG] -"
+          PREVIOUS_TAG_LINE=$(grep -nF "$PREVIOUS_TAG_ENTRY" CHANGELOG.md | cut -d: -f1)
+          if [ -n "$PREVIOUS_TAG_LINE" ]; then
+            PREVIOUS_TAG_LINE=$((PREVIOUS_TAG_LINE - 1))
+            CURRENT_TAG_LINE=$(grep -nF "$CHANGELOG_ENTRY" CHANGELOG.md | tail -n 1 | cut -d: -f1)
+
+            sed -n "${CURRENT_TAG_LINE},${PREVIOUS_TAG_LINE}p" CHANGELOG.md > release_body
+          fi
+        fi
 
     - name: Set up Go
       uses: actions/setup-go@v2
@@ -49,7 +76,7 @@ jobs:
         prerelease: false
         release_name: ${{ github.ref_name }}
         tag_name: ${{ github.ref_name }}
-        body_path: CHANGELOG.md
+        body_path: release_body
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
