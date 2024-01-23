@@ -11,6 +11,8 @@ type RuntimeConfigFlags struct {
 	Template       *string
 	ListTemplates  *bool
 	InlineTemplate *string
+	ShowFileChange *bool
+	NoNewLine      *bool
 }
 
 var RuntimeConfig RuntimeConfigFlags
@@ -22,6 +24,8 @@ func init() {
 		Template:       flag.String("t", templates.DefaultTemplateName, "Template to use"),
 		ListTemplates:  flag.Bool("T", false, "List available templates"),
 		InlineTemplate: flag.String("i", "", "Inline template"),
+		ShowFileChange: flag.Bool("f", false, "Show file change line"),
+		NoNewLine:      flag.Bool("n", false, "Don't add empty lines between entries"),
 	}
 	flag.Parse()
 }
