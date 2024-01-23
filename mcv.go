@@ -23,6 +23,11 @@ func main() {
 	t := initiateTemplate() //get template from the CLI params, or the default one
 
 	colors.SetEnabled(!*cli.RuntimeConfig.NoColors) // enable or disable the colors based on CLI flag
+	viewer.SetSettings(viewer.Settings{
+		NoNewLine:           *cli.RuntimeConfig.NoNewLine,      // don't add empty lines
+		ShowFileChangeLine:  *cli.RuntimeConfig.ShowFileChange, // show file change from tail
+		ShowParsedLinesOnly: *cli.RuntimeConfig.ParsedLineOnly, // don't show unparsed lines
+	})
 	if *cli.RuntimeConfig.Test == true {
 		// test values @todo - put those to tests
 		values := []string{

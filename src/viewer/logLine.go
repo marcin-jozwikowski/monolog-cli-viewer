@@ -3,7 +3,6 @@ package viewer
 import (
 	"bytes"
 	"encoding/json"
-	"monolog-cli-viewer/src/cli"
 	"monolog-cli-viewer/src/colors"
 	"strconv"
 	"text/template"
@@ -15,14 +14,6 @@ import (
 type LogLine struct {
 	json objx.Map
 	raw  string
-}
-
-var lineAppendix string = "\n"
-
-func init() {
-	if *cli.RuntimeConfig.NoNewLine {
-		lineAppendix = ""
-	}
 }
 
 func LogLineFromObjx(json objx.Map, rawLine string) *LogLine {
@@ -42,8 +33,22 @@ func LogLineFromObjx(json objx.Map, rawLine string) *LogLine {
 func (item *LogLine) GetFormattedString(t *template.Template) string {
 
 	if item.json == nil { // if the item has no json - there was a problem decoding it
-		if item.raw != "" { // if raw value has been set - return it in unformatted state
-			return item.raw + lineAppendix
+		if item.raw != "" {
+			// if raw value has been set - return it in unformatted state
+			if isFileChangeLine(item.raw) {
+				if settings.ShowFileChangeLine {
+					return item.raw + "\n" + getLineAppendix()
+				} else {
+					// if is fileName form tail and is NOT allowed to be displayed, exit
+					return ""
+				}
+			}
+
+			if settings.ShowParsedLinesOnly {
+				return ""
+			}
+
+			return item.raw + "\n" + getLineAppendix()
 		}
 		return ""
 	}
@@ -54,7 +59,7 @@ func (item *LogLine) GetFormattedString(t *template.Template) string {
 		panic(err2) // there was an error executing the template and it wasn't in the data
 	}
 
-	return tpl.String() + lineAppendix
+	return tpl.String() + getLineAppendix()
 }
 
 func (item *LogLine) addColorField() {
@@ -125,4 +130,12 @@ func (item *LogLine) addDatetimeField() {
 		}
 		item.json.Set("_datetime", date.Format("2006-01-02 15:04:05")) // Y-m-d H:i:s
 	}
+}
+
+func getLineAppendix() string {
+	if settings.NoNewLine {
+		return ""
+	}
+
+	return "\n"
 }
