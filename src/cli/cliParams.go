@@ -13,6 +13,7 @@ type RuntimeConfigFlags struct {
 	InlineTemplate *string
 	ShowFileChange *bool
 	NoNewLine      *bool
+	ParsedLineOnly *bool
 }
 
 var RuntimeConfig RuntimeConfigFlags
@@ -26,6 +27,7 @@ func init() {
 		InlineTemplate: flag.String("i", "", "Inline template"),
 		ShowFileChange: flag.Bool("f", false, "Show file change line"),
 		NoNewLine:      flag.Bool("n", false, "Don't add empty lines between entries"),
+		ParsedLineOnly: flag.Bool("p", false, "Parsed lines only"),
 	}
 	flag.Parse()
 }

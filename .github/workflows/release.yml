@@ -43,6 +43,10 @@ jobs:
       with:
         go-version: 1.21
     
+    - name: Run tests
+      run: |
+        go test mcv_test.go 
+
     - name: Variables
       id: vars
       run: |
