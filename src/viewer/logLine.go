@@ -116,7 +116,7 @@ func (item *LogLine) addDatetimeField() {
 		if err != nil {
 			return
 		}
-		tm := time.Unix(i/1000, 0)                                   // timetamp includes ms
+		tm := time.Unix(i/1000, 0).UTC()                             // timetamp includes ms
 		item.json.Set("_datetime", tm.Format("2006-01-02 15:04:05")) // Y-m-d H:i:s
 
 		return
