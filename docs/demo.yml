@@ -1,0 +1,178 @@
+# The configurations that used for the recording, feel free to edit them
+config:
+
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: bash -l
+  
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: /home/mjozwikowski/mcv/docs
+  
+  # Export additional ENV variables
+  env:
+    recording: true
+  
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: 120
+  
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: 19
+  
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+  
+  # Quality
+  # 1 - 100
+  quality: 100
+  
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+  
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 2000
+  
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: solid
+    title: mcv
+    style:
+      boxShadow: none
+      margin: 0px
+  
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a URL, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+  
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+  
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: "Monaco, Lucida Console, Ubuntu Mono, Monospace"
+  
+  # The size of the font
+  fontSize: 14
+  
+  # The height of lines
+  lineHeight: 1
+  
+  # The spacing between letters
+  letterSpacing: 0
+  
+  # Theme
+  theme:
+    background: "transparent"
+    foreground: "#afafaf"
+    cursor: "#c7c7c7"
+    black: "#232628"
+    red: "#fc4384"
+    green: "#b3e33b"
+    yellow: "#ffa727"
+    blue: "#75dff2"
+    magenta: "#ae89fe"
+    cyan: "#708387"
+    white: "#d5d5d0"
+    brightBlack: "#626566"
+    brightRed: "#ff7fac"
+    brightGreen: "#c8ed71"
+    brightYellow: "#ebdf86"
+    brightBlue: "#75dff2"
+    brightMagenta: "#ae89fe"
+    brightCyan: "#b1c6ca"
+    brightWhite: "#f9f9f4"
+  
+# Records, feel free to edit them
+records:
+  - delay: 241
+    content: "\r\n\e[?2004l\r\e]0;mjozwikowski@home:~/mcv\e\\\e]7;file://home/home/mjozwikowski/mcv\e\\\e[?2004h\e]0;mjozwikowski@home: ~/mcv\a\e[01;32mmjozwikowski@home\e[00m:\e[01;34m~/mcv\e[01;31m(main)\e[00m$ "
+  - delay: 1326
+    content: c
+  - delay: 182
+    content: a
+  - delay: 172
+    content: t
+  - delay: 167
+    content: ' '
+  - delay: 121
+    content: v
+  - delay: 130
+    content: a
+  - delay: 181
+    content: 'r/'
+  - delay: 172
+    content: t
+  - delay: 167
+    content: e
+  - delay: 121
+    content: s
+  - delay: 130
+    content: t.log
+  - delay: 326
+    content: "\r\n\e[?2004l\r{\"message\":\"Some test message\",\"context\":{\"user\":{\"id\":1},\"session\":{\"id\":\"bq2fk4i3nhkgbj4eua964g5r63\"}},\"level\":\"ERROR\",\"channel\":\"default\",\"timestamp\":\"1699540146122\"}\r\n[2023-10-23T11:07:47.038324+00:00] default.INFO: User logged in {\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}} []\r\n\e]0;mjozwikowski@home:~/mcv\e\\\e]7;file://home/home/mjozwikowski/mcv\e\\\e[?2004h\e]0;mjozwikowski@home: ~/mcv\a\e[01;32mmjozwikowski@home\e[00m:\e[01;34m~/mcv\e[01;31m(main)\e[00m$ "
+  - delay: 2739
+    content: cat var/test.log
+  - delay: 182
+    content: ' '
+  - delay: 172
+    content: '|'
+  - delay: 182
+    content: ' '
+  - delay: 167
+    content: .
+  - delay: 121
+    content: /
+  - delay: 130
+    content: m
+  - delay: 181
+    content: c
+  - delay: 145
+    content: 'v '
+  - delay: 511
+    content: "\r\n\e[?2004l\r\e[35mERROR:default\e[0m\t2023-11-09 14:29:06\t\e[35mSome test message\e[0m\r\r\n{\"session\":{\"id\":\"bq2fk4i3nhkgbj4eua964g5r63\"},\"user\":{\"id\":1}}\r\r\n\r\n\e[36mINFO:default\e[0m\t2023-10-23 11:07:47\t\e[36mUser logged in \e[0m\r\r\n{\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}}\r\r\n\r\n\e]0;mjozwikowski@home:~/mcv\e\\\e]7;file://home/home/mjozwikowski/mcv\e\\\e[?2004h\e]0;mjozwikowski@home: ~/mcv\a\e[01;32mmjozwikowski@home\e[00m:\e[01;34m~/mcv\e[01;31m(main)\e[00m$ "
+  - delay: 2222
+    content: 'cat var/test.log | ./mcv'
+  - delay: 198
+    content: ' '
+  - delay: 127
+    content: '-'
+  - delay: 125
+    content: t
+  - delay: 175
+    content: ' '
+  - delay: 141
+    content: m
+  - delay: 176
+    content: i
+  - delay: 144
+    content: 'n'
+  - delay: 567
+    content: "\r\n\e[?2004l\r\e[35mERROR:default\t2023-11-09 14:29:06\tSome test message\e[0m\r\n\e[36mINFO:default\t2023-10-23 11:07:47\tUser logged in \e[0m\r\n\e]0;mjozwikowski@home:~/mcv\e\\\e]7;file://home/home/mjozwikowski/mcv\e\\\e[?2004h\e]0;mjozwikowski@home: ~/mcv\a\e[01;32mmjozwikowski@home\e[00m:\e[01;34m~/mcv\e[01;31m(main)\e[00m$ "
+  - delay: 4344
+    content: "\e"

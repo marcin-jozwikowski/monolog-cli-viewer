@@ -15,3 +15,12 @@ log:
 	echo '{"message":"Example log of CRITICAL level.","context":{"firewall_name":"main"},"level":600,"level_name":"CRITICAL","channel":"security","datetime":"2023-11-14T00:37:26.623539+02:00","extra":{}}' >> var/log.log
 	echo '{"message":"Example log of ALERT level.","context":{"firewall_name":"main"},"level":700,"level_name":"ALERT","channel":"security","datetime":"2023-11-14T00:37:26.623539+02:00","extra":{}}' >> var/log.log
 	echo '{"message":"Example log of EMERGENCY level.","context":{"firewall_name":"main"},"level":800,"level_name":"EMERGENCY","channel":"security","datetime":"2023-11-14T00:37:26.623539+02:00","extra":{}}' >> var/log.log
+
+record_gif:
+	# https://www.terminalizer.com/install
+	cd docs/
+	npm install --local
+	./node_modules/terminalizer/bin/app.js record demo.yml
+
+render_gif:
+	./node_modules/terminalizer/bin/app.js render demo.yml -o demo.gif

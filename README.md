@@ -2,6 +2,10 @@
 
 ### A simple tool to format monolog output into more readable form
 
+<p align="center">
+    <img src="./docs/demo.gif?raw=true"/>
+</p>
+
 ## Installation 
 
 1. Download latest binary for your OS from [releases](https://github.com/marcin-jozwikowski/monolog-cli-viewer/releases)
