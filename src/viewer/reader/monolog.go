@@ -9,9 +9,15 @@ import (
 )
 
 var monologRegex *regexp.Regexp
+var jsonSegmentsRegex []*regexp.Regexp
 
 func init() {
 	monologRegex = regexp.MustCompile(`\[(?P<time>[\S]+)\] (?P<channel>[\S]+)\.(?P<level>[\S]+):`)
+	jsonSegmentsRegex = []*regexp.Regexp{
+		regexp.MustCompile(`\{(?:[^{}]*\{[^{}]*\}[^{}]*)*\}|\[.*?\]`),
+		regexp.MustCompile(`\{.*?\}|\[.*?\]`),
+		regexp.MustCompile(`(\{[^}]*\}|\[[^]]*\])`),
+	}
 }
 
 func MonologFormat(rawLine string) (objx.Map, error) {
@@ -29,7 +35,8 @@ func MonologFormat(rawLine string) (objx.Map, error) {
 	}
 
 	contextExtra := extractJSONSegments(messageContextExtra)
-	message, _ := strings.CutSuffix(messageContextExtra, strings.Join(contextExtra, " "))
+	suffix := strings.Join(contextExtra, " ")
+	message, _ := strings.CutSuffix(messageContextExtra, suffix)
 	message = strings.Trim(message, " \r\n\t")
 	objxFields := map[string]objx.Map{}
 
@@ -60,16 +67,31 @@ func getJsonOrEmpty(input string) objx.Map {
 }
 
 func extractJSONSegments(input string) []string {
-	// Define a regular expression to match JSON objects, including nested structures
-	jsonRegex := `\{(?:[^{}]*\{[^{}]*\}[^{}]*)*\}|\[.*?\]`
+	// @todo further improve on the algorithm to consider only one type array/object at once
+	// @todo return segments along with the message as a separate value
+	result := []string{}
+	inputLength := len(input)
+	openenedCount := 0
+	closingIndex := inputLength
+	for index := inputLength - 1; index > 0; index-- {
+		currentChar := input[index]
+		if currentChar == '}' || currentChar == ']' { // we're at the closing char
+			if openenedCount == 0 { // we're not inside JSON
+				closingIndex = index // means we've found the outermost closing tag
+			}
+			openenedCount++
+		}
 
-	// Compile the regular expression
-	re := regexp.MustCompile(jsonRegex)
+		if currentChar == '{' || currentChar == '[' { // we're at the opening char
+			openenedCount--
+			if openenedCount == 0 {
+				// prepend the JSON to the result. We're reading backwards.
+				result = append([]string{input[index : closingIndex+1]}, result...)
+			}
+		}
+	}
 
-	// Find all matches in the input string
-	matches := re.FindAllString(input, -1)
-
-	return matches
+	return result
 }
 
 func regexMatchToMap(value string, regex *regexp.Regexp) (map[string]string, string) {

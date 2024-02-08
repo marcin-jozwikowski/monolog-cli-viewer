@@ -20,6 +20,7 @@ const result_line_3__unparsed = "2023-10-23 11:03:16: [9a4e77e9afa8] [ERROR] [Wh
 const result_line_4__file_change = "==> some/path/to\\file.log <=="
 const result_line_5__user_logged = "INFO:default\t2023-10-23 11:07:47\tUser logged in\r\n{\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}}"
 const result_line_6__route_matched = "INFO:request\t2023-12-29 10:26:40\tMatched route \"api_login\".\r\n{\"method\":\"POST\",\"request_uri\":\"http://localhost/api/v1/login\",\"route\":\"api_login\",\"route_parameters\":{\"_controller\":\"App\\\\User\\\\Infrastructure\\\\Controller\\\\ApiLoginController::index\",\"_route\":\"api_login\"}}"
+const result_line_7__doctrine = "ERROR:request\t2023-12-31 11:18:53\tUncaught PHP Exception Symfony\\Component\\HttpKernel\\Exception\\HttpException: \"This value should be of type unknown. This value should not be blank. This value should not be blank.\" at RequestPayloadValueResolver.php line 127\r\n{\"exception\":\"[object] (Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\HttpException(code: 0): This value should be of type unknown.\\nThis value should not be blank.\\nThis value should not be blank. at /var/www/vendor/symfony/http-kernel/Controller/ArgumentResolver/RequestPayloadValueResolver.php:127)\\n[previous exception] [object] (Symfony\\\\Component\\\\Validator\\\\Exception\\\\ValidationFailedException(code: 0): :\\n    This value should be of type unknown.\\nObject(App\\\\Scooter\\\\Infrastructure\\\\Request\\\\UpdateLocation\\\\UpdateLocationRequest).latitude:\\n    This value should not be blank. (code c1051bb4-d103-4f74-8988-acbcafc7fdc3)\\nObject(App\\\\Scooter\\\\Infrastructure\\\\Request\\\\UpdateLocation\\\\UpdateLocationRequest).longitude:\\n    This value should not be blank. (code c1051bb4-d103-4f74-8988-acbcafc7fdc3)\\n at /var/www/vendor/symfony/http-kernel/Controller/ArgumentResolver/RequestPayloadValueResolver.php:127)\"}"
 const result_line__empty = ""
 
 func TestDefault(t *testing.T) {
@@ -37,6 +38,7 @@ func TestDefault(t *testing.T) {
 		result_line__empty,
 		result_line_5__user_logged + "\r\n\n",
 		result_line_6__route_matched + "\r\n\n",
+		result_line_7__doctrine + "\r\n\n",
 	})
 }
 
@@ -55,6 +57,7 @@ func TestNoNewLine(t *testing.T) {
 		result_line__empty,
 		result_line_5__user_logged + "\r\n",
 		result_line_6__route_matched + "\r\n",
+		result_line_7__doctrine + "\r\n",
 	})
 }
 
@@ -73,6 +76,7 @@ func TestShowFileChange(t *testing.T) {
 		result_line_4__file_change + "\n\n",
 		result_line_5__user_logged + "\r\n\n",
 		result_line_6__route_matched + "\r\n\n",
+		result_line_7__doctrine + "\r\n\n",
 	})
 }
 
@@ -91,6 +95,7 @@ func TestParsedLinesOnly(t *testing.T) {
 		result_line__empty,
 		result_line_5__user_logged + "\r\n\n",
 		result_line_6__route_matched + "\r\n\n",
+		result_line_7__doctrine + "\r\n\n",
 	})
 }
 
@@ -109,6 +114,7 @@ func TestNoNewLineFileChangeParsedOnly(t *testing.T) {
 		result_line_4__file_change + "\n",
 		result_line_5__user_logged + "\r\n",
 		result_line_6__route_matched + "\r\n",
+		result_line_7__doctrine + "\r\n",
 	})
 }
 
