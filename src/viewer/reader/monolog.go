@@ -34,10 +34,7 @@ func MonologFormat(rawLine string) (objx.Map, error) {
 		return objx.MSI(), errors.New("no context nor extra")
 	}
 
-	contextExtra := extractJSONSegments(messageContextExtra)
-	suffix := strings.Join(contextExtra, " ")
-	message, _ := strings.CutSuffix(messageContextExtra, suffix)
-	message = strings.Trim(message, " \r\n\t")
+	contextExtra, message := extractJSONSegments(messageContextExtra)
 	objxFields := map[string]objx.Map{}
 
 	if len(contextExtra) > 0 && len(contextExtra[0]) > 2 { // at least one field - context
@@ -66,9 +63,8 @@ func getJsonOrEmpty(input string) objx.Map {
 	return objx.MSI()
 }
 
-func extractJSONSegments(input string) []string {
+func extractJSONSegments(input string) ([]string, string) {
 	// @todo further improve on the algorithm to consider only one type array/object at once
-	// @todo return segments along with the message as a separate value
 	result := []string{}
 	inputLength := len(input)
 	openenedCount := 0
@@ -87,11 +83,12 @@ func extractJSONSegments(input string) []string {
 			if openenedCount == 0 {
 				// prepend the JSON to the result. We're reading backwards.
 				result = append([]string{input[index : closingIndex+1]}, result...)
+				input = input[0:index]
 			}
 		}
 	}
 
-	return result
+	return result, strings.Trim(input, "\r\t\n ")
 }
 
 func regexMatchToMap(value string, regex *regexp.Regexp) (map[string]string, string) {
