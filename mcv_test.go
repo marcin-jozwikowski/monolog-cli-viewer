@@ -14,6 +14,15 @@ func init() {
 	templ, _ = templates.GetTemplatateByName(templates.DefaultTemplateName)
 }
 
+const result_line_1__some_test = "NOTICE:default\t2023-11-09 14:29:06\tSome test message\r\n{\"session\":{\"id\":\"bq2fk4i3nhkgbj4eua964g5r63\"},\"user\":{\"id\":1}}"
+const result_line_2__checking_support = "DEBUG:security\t2023-11-14 00:37:26\tChecking support on authenticator.\r\n{\"authenticator\":\"App\\\\Security\\\\AppAuthenticator\",\"firewall_name\":\"main\"}"
+const result_line_3__unparsed = "2023-10-23 11:03:16: [9a4e77e9afa8] [ERROR] [Whatever] Login Error"
+const result_line_4__file_change = "==> some/path/to\\file.log <=="
+const result_line_5__user_logged = "INFO:default\t2023-10-23 11:07:47\tUser logged in\r\n{\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}}"
+const result_line_6__route_matched = "INFO:request\t2023-12-29 10:26:40\tMatched route \"api_login\".\r\n{\"method\":\"POST\",\"request_uri\":\"http://localhost/api/v1/login\",\"route\":\"api_login\",\"route_parameters\":{\"_controller\":\"App\\\\User\\\\Infrastructure\\\\Controller\\\\ApiLoginController::index\",\"_route\":\"api_login\"}}"
+const result_line_7__doctrine = "ERROR:request\t2023-12-31 11:18:53\tUncaught PHP Exception Symfony\\Component\\HttpKernel\\Exception\\HttpException: \"This value should be of type unknown. This value should not be blank. This value should not be blank.\" at RequestPayloadValueResolver.php line 127\r\n{\"exception\":\"[object] (Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\HttpException(code: 0): This value should be of type unknown.\\nThis value should not be blank.\\nThis value should not be blank. at /var/www/vendor/symfony/http-kernel/Controller/ArgumentResolver/RequestPayloadValueResolver.php:127)\\n[previous exception] [object] (Symfony\\\\Component\\\\Validator\\\\Exception\\\\ValidationFailedException(code: 0): :\\n    This value should be of type unknown.\\nObject(App\\\\Scooter\\\\Infrastructure\\\\Request\\\\UpdateLocation\\\\UpdateLocationRequest).latitude:\\n    This value should not be blank. (code c1051bb4-d103-4f74-8988-acbcafc7fdc3)\\nObject(App\\\\Scooter\\\\Infrastructure\\\\Request\\\\UpdateLocation\\\\UpdateLocationRequest).longitude:\\n    This value should not be blank. (code c1051bb4-d103-4f74-8988-acbcafc7fdc3)\\n at /var/www/vendor/symfony/http-kernel/Controller/ArgumentResolver/RequestPayloadValueResolver.php:127)\"}"
+const result_line__empty = ""
+
 func TestDefault(t *testing.T) {
 	viewer.SetSettings(viewer.Settings{
 		NoNewLine:           false,
@@ -23,11 +32,13 @@ func TestDefault(t *testing.T) {
 	})
 
 	runTests(t, "TestDefault", []string{
-		"NOTICE:default\t2023-11-09 14:29:06\tSome test message\r\n{\"session\":{\"id\":\"bq2fk4i3nhkgbj4eua964g5r63\"},\"user\":{\"id\":1}}\r\n\n",
-		"DEBUG:security\t2023-11-14 00:37:26\tChecking support on authenticator.\r\n{\"authenticator\":\"App\\\\Security\\\\AppAuthenticator\",\"firewall_name\":\"main\"}\r\n\n",
-		"2023-10-23 11:03:16: [9a4e77e9afa8] [ERROR] [Whatever] Login Error\n\n",
-		"",
-		"INFO:default\t2023-10-23 11:07:47\tUser logged in \r\n{\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}}\r\n\n",
+		result_line_1__some_test + "\r\n\n",
+		result_line_2__checking_support + "\r\n\n",
+		result_line_3__unparsed + "\n\n",
+		result_line__empty,
+		result_line_5__user_logged + "\r\n\n",
+		result_line_6__route_matched + "\r\n\n",
+		result_line_7__doctrine + "\r\n\n",
 	})
 }
 
@@ -40,11 +51,13 @@ func TestNoNewLine(t *testing.T) {
 	})
 
 	runTests(t, "TestNoNewLine", []string{
-		"NOTICE:default\t2023-11-09 14:29:06\tSome test message\r\n{\"session\":{\"id\":\"bq2fk4i3nhkgbj4eua964g5r63\"},\"user\":{\"id\":1}}\r\n",
-		"DEBUG:security\t2023-11-14 00:37:26\tChecking support on authenticator.\r\n{\"authenticator\":\"App\\\\Security\\\\AppAuthenticator\",\"firewall_name\":\"main\"}\r\n",
-		"2023-10-23 11:03:16: [9a4e77e9afa8] [ERROR] [Whatever] Login Error\n",
-		"",
-		"INFO:default\t2023-10-23 11:07:47\tUser logged in \r\n{\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}}\r\n",
+		result_line_1__some_test + "\r\n",
+		result_line_2__checking_support + "\r\n",
+		result_line_3__unparsed + "\n",
+		result_line__empty,
+		result_line_5__user_logged + "\r\n",
+		result_line_6__route_matched + "\r\n",
+		result_line_7__doctrine + "\r\n",
 	})
 }
 
@@ -57,11 +70,13 @@ func TestShowFileChange(t *testing.T) {
 	})
 
 	runTests(t, "TestShowFileChange", []string{
-		"NOTICE:default\t2023-11-09 14:29:06\tSome test message\r\n{\"session\":{\"id\":\"bq2fk4i3nhkgbj4eua964g5r63\"},\"user\":{\"id\":1}}\r\n\n",
-		"DEBUG:security\t2023-11-14 00:37:26\tChecking support on authenticator.\r\n{\"authenticator\":\"App\\\\Security\\\\AppAuthenticator\",\"firewall_name\":\"main\"}\r\n\n",
-		"2023-10-23 11:03:16: [9a4e77e9afa8] [ERROR] [Whatever] Login Error\n\n",
-		"==> some/path/to\\file.log <==\n\n",
-		"INFO:default\t2023-10-23 11:07:47\tUser logged in \r\n{\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}}\r\n\n",
+		result_line_1__some_test + "\r\n\n",
+		result_line_2__checking_support + "\r\n\n",
+		result_line_3__unparsed + "\n\n",
+		result_line_4__file_change + "\n\n",
+		result_line_5__user_logged + "\r\n\n",
+		result_line_6__route_matched + "\r\n\n",
+		result_line_7__doctrine + "\r\n\n",
 	})
 }
 
@@ -74,11 +89,13 @@ func TestParsedLinesOnly(t *testing.T) {
 	})
 
 	runTests(t, "TestParsedLinesOnly", []string{
-		"NOTICE:default\t2023-11-09 14:29:06\tSome test message\r\n{\"session\":{\"id\":\"bq2fk4i3nhkgbj4eua964g5r63\"},\"user\":{\"id\":1}}\r\n\n",
-		"DEBUG:security\t2023-11-14 00:37:26\tChecking support on authenticator.\r\n{\"authenticator\":\"App\\\\Security\\\\AppAuthenticator\",\"firewall_name\":\"main\"}\r\n\n",
-		"",
-		"",
-		"INFO:default\t2023-10-23 11:07:47\tUser logged in \r\n{\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}}\r\n\n",
+		result_line_1__some_test + "\r\n\n",
+		result_line_2__checking_support + "\r\n\n",
+		result_line__empty,
+		result_line__empty,
+		result_line_5__user_logged + "\r\n\n",
+		result_line_6__route_matched + "\r\n\n",
+		result_line_7__doctrine + "\r\n\n",
 	})
 }
 
@@ -91,21 +108,28 @@ func TestNoNewLineFileChangeParsedOnly(t *testing.T) {
 	})
 
 	runTests(t, "TestNoNewLineFileChangeParsedOnly", []string{
-		"NOTICE:default\t2023-11-09 14:29:06\tSome test message\r\n{\"session\":{\"id\":\"bq2fk4i3nhkgbj4eua964g5r63\"},\"user\":{\"id\":1}}\r\n",
-		"DEBUG:security\t2023-11-14 00:37:26\tChecking support on authenticator.\r\n{\"authenticator\":\"App\\\\Security\\\\AppAuthenticator\",\"firewall_name\":\"main\"}\r\n",
-		"",
-		"==> some/path/to\\file.log <==\n",
-		"INFO:default\t2023-10-23 11:07:47\tUser logged in \r\n{\"user\":{\"id\":\"54767261-98c6-4a57-9064-0d35fd06d1fc\"}}\r\n",
+		result_line_1__some_test + "\r\n",
+		result_line_2__checking_support + "\r\n",
+		result_line__empty,
+		result_line_4__file_change + "\n",
+		result_line_5__user_logged + "\r\n",
+		result_line_6__route_matched + "\r\n",
+		result_line_7__doctrine + "\r\n",
 	})
 }
 
 func runTests(t *testing.T, name string, expected []string) {
+	count := len(expected)
 	for id, line := range data.GetTestData() {
 		logLineItem := viewer.InitLogLine(line)
 		result := logLineItem.GetFormattedString()
 
+		if id == count {
+			t.Errorf("Response %d out of bounds on %s. Did not expect: '%q'", id, name, result)
+		}
+
 		if result != expected[id] {
-			t.Errorf("Invalid string value on '%s' item '%d'. Expected '%q', got '%q'", "testDefault", id, expected[id], result)
+			t.Errorf("Invalid string value on test '%s' item '%d'. Expected\r\n'%q', got\r\n'%q'", name, id, expected[id], result)
 		}
 	}
 }
