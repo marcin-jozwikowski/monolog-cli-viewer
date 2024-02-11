@@ -84,6 +84,10 @@ func extractJSONSegments(input string) ([]string, string) {
 				// prepend the JSON to the result. We're reading backwards.
 				result = append([]string{input[index : closingIndex+1]}, result...)
 				input = input[0:index]
+
+				if len(result) == 2 { // we got context, and extra - enough
+					break
+				}
 			}
 		}
 	}
