@@ -1,6 +1,7 @@
 package viewer
 
 import (
+	"errors"
 	"monolog-cli-viewer/src/viewer/reader"
 	"regexp"
 	"strings"
@@ -15,8 +16,16 @@ func init() {
 }
 
 func InitLogLine(rawLine string) *LogLine {
-	j, err := objx.FromJSON(rawLine)
-	if err != nil {
+	var j objx.Map
+	var err error
+	rawLine = strings.Trim(rawLine, "\r\n\t ")
+	if rawLine[0] == '{' { // if it starts with a JSON opening
+		j, err = objx.FromJSON(rawLine) // lets try parsing it as JSON
+	} else {
+		err = errors.New("not json")
+	}
+
+	if err != nil { // JSON did not work or couldn't work
 		j, err = reader.MonologFormat(rawLine)
 		if err != nil {
 			// cannot have it as JSON so lets at least return the raw line back
