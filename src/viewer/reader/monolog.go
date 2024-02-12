@@ -69,18 +69,24 @@ func extractJSONSegments(input string) ([]string, string) {
 	inputLength := len(input)
 	openenedCount := 0
 	closingIndex := inputLength
+	isStringContext := false
 	for index := inputLength - 1; index > 0; index-- {
 		currentChar := input[index]
-		if currentChar == '}' || currentChar == ']' { // we're at the closing char
+
+		if currentChar == '"' && input[index-1] != '\\' { // if the character is a " and not an escaped one
+			isStringContext = !isStringContext
+		}
+
+		if !isStringContext && (currentChar == '}' || currentChar == ']') { // we're at the closing char and not inside a string
 			if openenedCount == 0 { // we're not inside JSON
 				closingIndex = index // means we've found the outermost closing tag
 			}
 			openenedCount++
 		}
 
-		if currentChar == '{' || currentChar == '[' { // we're at the opening char
+		if !isStringContext && (currentChar == '{' || currentChar == '[') { // we're at the opening char and not inside a string
 			openenedCount--
-			if openenedCount == 0 {
+			if openenedCount == 0 { // we just closed the last context
 				// prepend the JSON to the result. We're reading backwards.
 				result = append([]string{input[index : closingIndex+1]}, result...)
 				input = input[0:index]
