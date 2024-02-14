@@ -43,6 +43,7 @@ func TestDefault(t *testing.T) {
 		result_line_7__doctrine_exception + "\r\n\n",
 		result_line_8__doctrine_query + "\r\n\n",
 		result_line_9__json_chars_test + "\r\n\n",
+		result_line__empty,
 	})
 }
 
@@ -64,6 +65,7 @@ func TestNoNewLine(t *testing.T) {
 		result_line_7__doctrine_exception + "\r\n",
 		result_line_8__doctrine_query + "\r\n",
 		result_line_9__json_chars_test + "\r\n",
+		result_line__empty,
 	})
 }
 
@@ -85,6 +87,7 @@ func TestShowFileChange(t *testing.T) {
 		result_line_7__doctrine_exception + "\r\n\n",
 		result_line_8__doctrine_query + "\r\n\n",
 		result_line_9__json_chars_test + "\r\n\n",
+		result_line__empty,
 	})
 }
 
@@ -106,6 +109,7 @@ func TestParsedLinesOnly(t *testing.T) {
 		result_line_7__doctrine_exception + "\r\n\n",
 		result_line_8__doctrine_query + "\r\n\n",
 		result_line_9__json_chars_test + "\r\n\n",
+		result_line__empty,
 	})
 }
 
@@ -127,6 +131,7 @@ func TestNoNewLineFileChangeParsedOnly(t *testing.T) {
 		result_line_7__doctrine_exception + "\r\n",
 		result_line_8__doctrine_query + "\r\n",
 		result_line_9__json_chars_test + "\r\n",
+		result_line__empty,
 	})
 }
 
